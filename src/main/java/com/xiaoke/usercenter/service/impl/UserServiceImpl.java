@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiaoke.usercenter.constant.UserConstant.USER_LOGIN_STATE;
+
 /**
  * @author xiaoke
  */
@@ -43,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     public static final String SALT = "xiaoke";
 
-    private static final String USER_LOGIN_STATE = "userLoginState";
+
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -136,6 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setAvatarUrl(user.getAvatarUrl());
         safetyUser.setGender(user.getGender());
         safetyUser.setEmail(user.getEmail());
+        safetyUser.setUserRole(user.getUserRole());
         safetyUser.setUserStatus(user.getUserStatus());
         safetyUser.setPhone(user.getPhone());
         safetyUser.setCreateTime(user.getCreateTime());

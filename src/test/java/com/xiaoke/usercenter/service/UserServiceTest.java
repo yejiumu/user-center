@@ -18,8 +18,8 @@ class UserServiceTest {
     @Test
     public void testAddUser() {
         User user = new User();
-        user.setUsername("dogyupi");
-        user.setUserAccount("123");
+        user.setUsername("xiaoke");
+        user.setUserAccount("12345678");
         user.setAvatarUrl("https://i1.hdslb.com/bfs/archive/5ef3a97732eb4d7c5f8d1bac333287ab15c7d5d7.jpg@672w_378h_1c.webp");
         user.setGender((byte) 0);
         user.setUserPassword("xxx");
