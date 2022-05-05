@@ -19,10 +19,10 @@ class UserServiceTest {
     public void testAddUser() {
         User user = new User();
         user.setUsername("xiaoke");
-        user.setUserAccount("12345678");
+        user.setUserAccount("xiaoke");
         user.setAvatarUrl("https://i1.hdslb.com/bfs/archive/5ef3a97732eb4d7c5f8d1bac333287ab15c7d5d7.jpg@672w_378h_1c.webp");
         user.setGender((byte) 0);
-        user.setUserPassword("xxx");
+        user.setUserPassword("123123123");
         user.setEmail("123");
         user.setPhone("456");
 
@@ -64,6 +64,6 @@ class UserServiceTest {
 
         userAccount = "yupi";
         result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertTrue(result > 0);
+        Assertions.assertEquals(-1, result);
     }
 }

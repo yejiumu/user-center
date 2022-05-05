@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.xiaoke.usercenter.constant.UserConstant.ADMIN_ROLE;
 import static com.xiaoke.usercenter.constant.UserConstant.USER_LOGIN_STATE;
@@ -64,7 +65,9 @@ public class UserController {
         if (StringUtils.isNotBlank(username)) {
             queryWrapper.like("username", username);
         }
-        return userService.list(queryWrapper);
+        List<User> userList = userService.list(queryWrapper);
+        // 搜索要进行脱敏
+        return userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
     }
 
     @PostMapping("/delete")
