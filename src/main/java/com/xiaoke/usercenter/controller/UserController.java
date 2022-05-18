@@ -56,6 +56,27 @@ public class UserController {
         return userService.userLogin(userAccount, userPassword, request);
     }
 
+    @PostMapping("/logout")
+    public Integer userLogout(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return userService.userLogout(request);
+    }
+
+    @GetMapping("/current")
+    public User getCurrentUser(HttpServletRequest request) {
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User currentUser = (User) userObj;
+        if (currentUser == null) {
+            return null;
+        }
+        long id = currentUser.getId();
+        // todo 校验用户是否合法
+        User user = userService.getById(id);
+        return userService.getSafetyUser(user);
+    }
+
     @GetMapping("/search")
     public List<User> searchUsers(String username, HttpServletRequest request) {
         if (!isAdmin(request)) {
@@ -80,6 +101,7 @@ public class UserController {
         }
         return userService.removeById(id);
     }
+
 
     /**
      * 是否为管理员

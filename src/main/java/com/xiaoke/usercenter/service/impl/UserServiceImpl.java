@@ -81,6 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes(StandardCharsets.UTF_8));
         // 3、插入数据
         User user = new User();
+        user.setUsername(userAccount);
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
         boolean saveResult = this.save(user);
@@ -144,6 +145,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public User getSafetyUser(User originUser) {
+        if (originUser == null) {
+            return null;
+        }
         User safetyUser = new User();
         safetyUser.setId(originUser.getId());
         safetyUser.setUsername(originUser.getUsername());
@@ -156,6 +160,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setPhone(originUser.getPhone());
         safetyUser.setCreateTime(originUser.getCreateTime());
         return safetyUser;
+    }
+
+    /**
+     * 用户注销
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public int userLogout(HttpServletRequest request) {
+        // 移除登入态
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        return 1;
     }
 }
 
