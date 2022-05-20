@@ -1,6 +1,7 @@
 package com.xiaoke.usercenter.model.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
  * 用户表
  * @TableName user
  */
+@Data
 @TableName(value ="user")
 public class User implements Serializable {
     /**
@@ -77,6 +79,11 @@ public class User implements Serializable {
      * 用户角色 0 - 普通角色 1 - 管理员
      */
     private Integer userRole;
+
+    /**
+     * 星球编号
+     */
+    private String planetCode;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

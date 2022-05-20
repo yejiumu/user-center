@@ -4,6 +4,8 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoke.usercenter.common.ErrorCode;
+import com.xiaoke.usercenter.exception.BusinessException;
 import com.xiaoke.usercenter.model.domain.User;
 import com.xiaoke.usercenter.service.UserService;
 import com.xiaoke.usercenter.Mapper.UserMapper;
@@ -41,41 +43,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public static int userPasswordLength = 8;
 
     /**
+     * 星球编号长度
+     */
+    public static int planetCodeLength = 5;
+
+    /**
      * 盐值，混淆密码
      */
     public static final String SALT = "xiaoke";
 
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode) {
         // 1、校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         if (userAccount.length() < userAccountLength) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度过短");
         }
         if (userPassword.length() < userPasswordLength
                 || checkPassword.length() < userPasswordLength) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码过短");
+        }
+
+        if (planetCode.length() > planetCodeLength) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号过长");
         }
         // 账户不能包含特殊字符
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号中含有特殊字符");
         }
         // 密码和校验密码相同
         if (!userPassword.equals(checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次密码长度不一致");
         }
 
         // 账户不能重复
-        QueryWrapper<User> queryWrapper = new QueryWrapper();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         long count = userMapper.selectCount(queryWrapper);
         if (count > 0) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号已存在");
+        }
+
+        // 星球编号不能重复
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("planetCode", planetCode);
+        count = userMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号已存在");
         }
         // 2、加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes(StandardCharsets.UTF_8));
@@ -84,9 +103,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUsername(userAccount);
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
+        user.setPlanetCode(planetCode);
         boolean saveResult = this.save(user);
         if (!saveResult) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "因未知原因导致插入失败");
         }
         return user.getId();
     }
@@ -103,20 +123,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 1.校验
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         if (userAccount.length() < userAccountLength) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度过短");
         }
         if (userPassword.length() < userPasswordLength) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度过短");
         }
 
         // 账户不能包含特殊字符
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户中含有特殊字符");
         }
         // 2.加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
@@ -155,6 +175,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setAvatarUrl(originUser.getAvatarUrl());
         safetyUser.setGender(originUser.getGender());
         safetyUser.setEmail(originUser.getEmail());
+        safetyUser.setPlanetCode(originUser.getPlanetCode());
         safetyUser.setUserRole(originUser.getUserRole());
         safetyUser.setUserStatus(originUser.getUserStatus());
         safetyUser.setPhone(originUser.getPhone());
