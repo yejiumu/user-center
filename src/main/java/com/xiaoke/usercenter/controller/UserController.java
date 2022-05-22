@@ -43,7 +43,7 @@ public class UserController {
         String planetCode = userRegisterRequest.getPlanetCode();
 
         // 判断是否有变量为空
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 返回创建用户时返回的编码
