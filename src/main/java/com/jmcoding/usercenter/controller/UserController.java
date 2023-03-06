@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
     @Resource
     private UserService userService;
@@ -141,11 +141,30 @@ public class UserController {
      * 根据标签查询用户
      */
     @GetMapping("/search/tags")
-    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList) {
+    public BaseResponse<List<User>> searchUsersByTags(
+            @RequestParam(required = false) List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         List<User> userList = userService.searchUsersByTags(tagNameList);
         return ResultUtils.success(userList);
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @param request
+     * @return
+     */
+    @PostMapping("/update")
+    public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {
+        // 1. 校验参数是否为空
+        if (user == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getCurrentUser(request);
+        int result = userService.updateUser(user, loginUser);
+        return ResultUtils.success(result);
     }
 }
