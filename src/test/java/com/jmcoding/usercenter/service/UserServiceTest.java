@@ -1,5 +1,6 @@
 package com.jmcoding.usercenter.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,14 +9,16 @@ import com.jmcoding.usercenter.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 
 import static com.jmcoding.usercenter.common.ErrorCode.SYSTEM_ERROR;
+import static com.jmcoding.usercenter.service.impl.UserServiceImpl.SALT;
 
 @SpringBootTest
 class UserServiceTest {
-//
+    //
 //    @Resource
 //    private UserService userService;
 //
@@ -83,4 +86,9 @@ class UserServiceTest {
 //        List<User> userList = userService.searchUsersByTags(tagNameList);
 //        Assertions.assertNotNull(userList);
 //    }
+    @Test
+    void demo() {
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + "123123123").getBytes(StandardCharsets.UTF_8));
+        System.out.println(encryptPassword);
+    }
 }

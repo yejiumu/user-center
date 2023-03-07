@@ -41,9 +41,9 @@ public class User implements Serializable {
     private Byte gender;
 
     /**
-     * 密码
+     * 个人简介
      */
-    private String userPassword;
+    private String profile;
 
     /**
      * 邮箱
@@ -73,7 +73,6 @@ public class User implements Serializable {
     /**
      * 是否删除
      */
-    @TableLogic
     private Byte isDelete;
 
     /**
@@ -86,13 +85,18 @@ public class User implements Serializable {
      */
     private String planetCode;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
     /**
-     * 标签列表json
+     * 标签列表
      */
     private String tags;
+
+    /**
+     * 密码
+     */
+    private String userPassword;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 
     /**
      *
@@ -165,17 +169,17 @@ public class User implements Serializable {
     }
 
     /**
-     * 密码
+     * 个人简介
      */
-    public String getUserPassword() {
-        return userPassword;
+    public String getProfile() {
+        return profile;
     }
 
     /**
-     * 密码
+     * 个人简介
      */
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     /**
@@ -276,6 +280,48 @@ public class User implements Serializable {
         this.userRole = userRole;
     }
 
+    /**
+     * 星球编号
+     */
+    public String getPlanetCode() {
+        return planetCode;
+    }
+
+    /**
+     * 星球编号
+     */
+    public void setPlanetCode(String planetCode) {
+        this.planetCode = planetCode;
+    }
+
+    /**
+     * 标签列表
+     */
+    public String getTags() {
+        return tags;
+    }
+
+    /**
+     * 标签列表
+     */
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * 密码
+     */
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    /**
+     * 密码
+     */
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -293,14 +339,17 @@ public class User implements Serializable {
                 && (this.getUserAccount() == null ? other.getUserAccount() == null : this.getUserAccount().equals(other.getUserAccount()))
                 && (this.getAvatarUrl() == null ? other.getAvatarUrl() == null : this.getAvatarUrl().equals(other.getAvatarUrl()))
                 && (this.getGender() == null ? other.getGender() == null : this.getGender().equals(other.getGender()))
-                && (this.getUserPassword() == null ? other.getUserPassword() == null : this.getUserPassword().equals(other.getUserPassword()))
+                && (this.getProfile() == null ? other.getProfile() == null : this.getProfile().equals(other.getProfile()))
                 && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
                 && (this.getUserStatus() == null ? other.getUserStatus() == null : this.getUserStatus().equals(other.getUserStatus()))
                 && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
                 && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
                 && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
                 && (this.getIsDelete() == null ? other.getIsDelete() == null : this.getIsDelete().equals(other.getIsDelete()))
-                && (this.getUserRole() == null ? other.getUserRole() == null : this.getUserRole().equals(other.getUserRole()));
+                && (this.getUserRole() == null ? other.getUserRole() == null : this.getUserRole().equals(other.getUserRole()))
+                && (this.getPlanetCode() == null ? other.getPlanetCode() == null : this.getPlanetCode().equals(other.getPlanetCode()))
+                && (this.getTags() == null ? other.getTags() == null : this.getTags().equals(other.getTags()))
+                && (this.getUserPassword() == null ? other.getUserPassword() == null : this.getUserPassword().equals(other.getUserPassword()));
     }
 
     @Override
@@ -312,7 +361,7 @@ public class User implements Serializable {
         result = prime * result + ((getUserAccount() == null) ? 0 : getUserAccount().hashCode());
         result = prime * result + ((getAvatarUrl() == null) ? 0 : getAvatarUrl().hashCode());
         result = prime * result + ((getGender() == null) ? 0 : getGender().hashCode());
-        result = prime * result + ((getUserPassword() == null) ? 0 : getUserPassword().hashCode());
+        result = prime * result + ((getProfile() == null) ? 0 : getProfile().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((getUserStatus() == null) ? 0 : getUserStatus().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
@@ -320,6 +369,9 @@ public class User implements Serializable {
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getIsDelete() == null) ? 0 : getIsDelete().hashCode());
         result = prime * result + ((getUserRole() == null) ? 0 : getUserRole().hashCode());
+        result = prime * result + ((getPlanetCode() == null) ? 0 : getPlanetCode().hashCode());
+        result = prime * result + ((getTags() == null) ? 0 : getTags().hashCode());
+        result = prime * result + ((getUserPassword() == null) ? 0 : getUserPassword().hashCode());
         return result;
     }
 
@@ -334,7 +386,7 @@ public class User implements Serializable {
         sb.append(", userAccount=").append(userAccount);
         sb.append(", avatarUrl=").append(avatarUrl);
         sb.append(", gender=").append(gender);
-        sb.append(", userPassword=").append(userPassword);
+        sb.append(", profile=").append(profile);
         sb.append(", email=").append(email);
         sb.append(", userStatus=").append(userStatus);
         sb.append(", phone=").append(phone);
@@ -342,6 +394,9 @@ public class User implements Serializable {
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDelete=").append(isDelete);
         sb.append(", userRole=").append(userRole);
+        sb.append(", planetCode=").append(planetCode);
+        sb.append(", tags=").append(tags);
+        sb.append(", userPassword=").append(userPassword);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

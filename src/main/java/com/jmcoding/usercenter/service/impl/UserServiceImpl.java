@@ -2,9 +2,8 @@ package com.jmcoding.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jmcoding.usercenter.Mapper.UserMapper;
+import com.jmcoding.usercenter.mapper.UserMapper;
 import com.jmcoding.usercenter.common.ErrorCode;
-import com.jmcoding.usercenter.constant.UserConstant;
 import com.jmcoding.usercenter.exception.BusinessException;
 import com.jmcoding.usercenter.service.UserService;
 import com.jmcoding.usercenter.model.domain.User;

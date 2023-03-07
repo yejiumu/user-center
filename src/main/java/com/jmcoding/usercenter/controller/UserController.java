@@ -1,6 +1,7 @@
 package com.jmcoding.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmcoding.usercenter.common.BaseResponse;
 import com.jmcoding.usercenter.common.ErrorCode;
 import com.jmcoding.usercenter.common.ResultUtils;
@@ -9,24 +10,31 @@ import com.jmcoding.usercenter.exception.BusinessException;
 import com.jmcoding.usercenter.model.domain.request.UserRegisterRequest;
 import com.jmcoding.usercenter.model.domain.User;
 import com.jmcoding.usercenter.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * @author xiaoke
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
     @Resource
     private UserService userService;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -166,5 +174,39 @@ public class UserController {
         User loginUser = userService.getCurrentUser(request);
         int result = userService.updateUser(user, loginUser);
         return ResultUtils.success(result);
+    }
+
+
+    /**
+     * 推荐页面
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/recommend")
+    public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
+        User loginUser = userService.getCurrentUser(request);
+        String redisKey = String.format("yupao:user:recommend:%s", loginUser.getId());
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        // 如果有缓存，直接读缓存
+        Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
+        log.error("yes1");
+        if (userPage != null) {
+            log.error("yes2");
+            return ResultUtils.success(userPage);
+        }
+        log.error("no1");
+        // 无缓存，查数据库
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        userPage = userService.page(new Page<>(pageNum, pageSize), queryWrapper);
+        // 写缓存
+        try {
+            valueOperations.set(redisKey, userPage, 30, TimeUnit.MINUTES);
+            log.error("no2");
+        } catch (Exception e) {
+            log.error("redis set key error", e);
+        }
+        log.error("read down");
+        return ResultUtils.success(userPage);
     }
 }
