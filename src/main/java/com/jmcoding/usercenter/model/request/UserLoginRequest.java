@@ -1,4 +1,4 @@
-package com.jmcoding.usercenter.model.domain.request;
+package com.jmcoding.usercenter.model.request;
 
 import lombok.Data;
 

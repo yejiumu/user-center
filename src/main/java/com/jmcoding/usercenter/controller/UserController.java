@@ -7,7 +7,7 @@ import com.jmcoding.usercenter.common.ErrorCode;
 import com.jmcoding.usercenter.common.ResultUtils;
 import com.jmcoding.usercenter.constant.UserConstant;
 import com.jmcoding.usercenter.exception.BusinessException;
-import com.jmcoding.usercenter.model.domain.request.UserRegisterRequest;
+import com.jmcoding.usercenter.model.request.UserRegisterRequest;
 import com.jmcoding.usercenter.model.domain.User;
 import com.jmcoding.usercenter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
