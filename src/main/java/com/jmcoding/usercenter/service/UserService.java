@@ -2,6 +2,7 @@ package com.jmcoding.usercenter.service;
 
 import com.jmcoding.usercenter.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -51,6 +52,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 是否为管理员
+     *
      * @param request
      * @return
      */
@@ -58,6 +60,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 是否为管理员
+     *
      * @param loginUser
      * @return
      */
@@ -65,6 +68,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 获取当前用户
+     *
      * @param request
      * @return
      */
@@ -72,9 +76,19 @@ public interface UserService extends IService<User> {
 
     /**
      * 更新用户信息
+     *
      * @param user
      * @param loginUser
      * @return
      */
     int updateUser(User user, User loginUser);
+
+    /**
+     * 匹配用户
+     *
+     * @param num
+     * @param user
+     * @return
+     */
+    List<User> matchUsers(@RequestParam long num, User user);
 }

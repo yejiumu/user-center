@@ -190,23 +190,18 @@ public class UserController {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         // 如果有缓存，直接读缓存
         Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
-        log.error("yes1");
         if (userPage != null) {
-            log.error("yes2");
             return ResultUtils.success(userPage);
         }
-        log.error("no1");
         // 无缓存，查数据库
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         userPage = userService.page(new Page<>(pageNum, pageSize), queryWrapper);
         // 写缓存
         try {
             valueOperations.set(redisKey, userPage, 30, TimeUnit.MINUTES);
-            log.error("no2");
         } catch (Exception e) {
             log.error("redis set key error", e);
         }
-        log.error("read down");
         return ResultUtils.success(userPage);
     }
 }

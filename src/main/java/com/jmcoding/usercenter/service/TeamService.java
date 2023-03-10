@@ -6,6 +6,7 @@ import com.jmcoding.usercenter.model.domain.Team;
 import com.jmcoding.usercenter.model.domain.User;
 import com.jmcoding.usercenter.model.dto.TeamQuery;
 import com.jmcoding.usercenter.model.request.TeamJoinRequest;
+import com.jmcoding.usercenter.model.request.TeamQuitRequest;
 import com.jmcoding.usercenter.model.request.TeamUpdateRequest;
 
 import java.util.List;
@@ -49,4 +50,22 @@ public interface TeamService extends IService<Team> {
      * @return
      */
     boolean joinTeam(TeamJoinRequest teamJoinRequest, User loginUser);
+
+    /**
+     * 退出队伍
+     *
+     * @param teamQuitRequest
+     * @param loginUser
+     * @return
+     */
+    boolean quitTeam(TeamQuitRequest teamQuitRequest, User loginUser);
+
+    /**
+     * 删除队伍
+     *
+     * @param id
+     * @param loginUser
+     * @return
+     */
+    boolean deleteTeam(long id, User loginUser);
 }

@@ -6,11 +6,15 @@ package com.jmcoding.usercenter.common;
  * @author xiaoke
  */
 public enum ErrorCode {
+    /**
+     * 一切顺利
+     */
     SUCCESS(0, "ok", ""),
     PARAMS_ERROR(40000, "请求参数错误", ""),
     NULL_ERROR(40001, "请求数据为空", ""),
     NOT_LOGIN(40100, "未登入", ""),
     NO_AUTH(40101, "无权限", ""),
+    FORBIDDEN(40301, "禁止操作", ""),
     SYSTEM_ERROR(50000, "系统内部异常", "");
 
     /**
